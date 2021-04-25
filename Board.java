@@ -1,14 +1,21 @@
 import java.util.ArrayList;
 
 public class Board {
-    private int joueur1 = 0;
-    private int joueur2 = 1;
+    private int joueur1 = 1;
+    private int joueur2 = 2;
     private int[][] board;
 
     public Board() {
-        this.board = new int[7][6];
+        this.board = new int[6][7];
     }
 
+    public Board(int joueur1, int joueur2) {
+        this.board = new int[6][7];
+        this.joueur1 = joueur1;
+        this.joueur2 = joueur2;
+    }
+
+    // Board [ligne][colonne]
     public Board(int[][] board) {
         this.board = this.copyBoard(board);
     }
@@ -27,25 +34,25 @@ public class Board {
     // joue un coup sur le board
     public void play(int x, int joueurEnCours) {
         int hauteur = 0;
-        for (int i = 0; i < this.board[x].length; i++) {
-            if (this.board[x][i] == this.joueur1 || this.board[x][i] == this.joueur2) {
+        x--;
+        for (int i = 0; i < this.board.length; i++) {
+            if (this.board[i][x] == this.joueur1 || this.board[i][x] == this.joueur2) {
                 hauteur++;
             }
         }
-        this.board[x][hauteur] = joueurEnCours;
+        try {
+            this.board[this.board.length - (hauteur + 1)][x] = joueurEnCours;
+        } catch (Exception e) {
+            System.out.println("La colonne " + x + " est déjà rempli à fond");
+        }
+
     }
 
     // retourne la liste de coup possible
     public ArrayList<Integer> getListCoup() {
         ArrayList<Integer> result = new ArrayList<Integer>();
-        for (int i = 0; i < this.board.length; i++) {
-            int caseLibre = 6;
-            for (int j = 0; j < this.board[i][j]; j++) {
-                if (this.board[i][j] == this.joueur1 || this.board[i][j] == this.joueur2) {
-                    caseLibre--;
-                }
-            }
-            if (caseLibre != 0) {
+        for (int i = 0; i < this.board[0].length; i++) {
+            if (this.board[0][i] != this.joueur1 && this.board[0][i] != this.joueur2) {
                 result.add(i);
             }
         }
@@ -54,11 +61,19 @@ public class Board {
 
     public String toString() {
         String result = new String();
-        result += "---------------------\n";
+        result += "\n\n";
         for (int i = 0; i < this.board.length; i++) {
-            if (i == 0) {
-
+            for (int j = 0; j < this.board[i].length; j++) {
+                if (this.board[i][j] == this.joueur1 || this.board[i][j] == this.joueur2) {
+                    result += " | " + this.board[i][j];
+                } else {
+                    result += " |  ";
+                }
             }
+
+            result += " |\n";
         }
+        result += "   1   2   3   4   5   6   7 ";
+        return result;
     }
 }
