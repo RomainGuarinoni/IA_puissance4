@@ -43,7 +43,7 @@ public class Board {
         try {
             this.board[this.board.length - (hauteur + 1)][x] = joueurEnCours;
         } catch (Exception e) {
-            System.out.println("La colonne " + x + " est déjà rempli à fond");
+            System.out.println("La colonne " + x + 1 + " est déjà rempli à fond");
         }
 
     }
@@ -57,6 +57,29 @@ public class Board {
             }
         }
         return result;
+    }
+
+    public ArrayList<ArrayList<Integer>> getAllDiag() {
+        ArrayList<ArrayList<Integer>> diags = new ArrayList<ArrayList<Integer>>();
+        for (int i = 3; i <= 5; i++) {
+            // System.out.println("new diags " + i);
+            int iAux = i;
+            ArrayList<Integer> diag1 = new ArrayList<Integer>();
+            ArrayList<Integer> diag2 = new ArrayList<Integer>();
+            for (int j = 0, k = 6; j < i && k >= 0; j++, k--) {
+                // System.out.println("calcul");
+                diag1.add(this.board[iAux][j]);
+                diag2.add(this.board[iAux][k]);
+                iAux--;
+            }
+            diags.add(diag1);
+            diags.add(diag2);
+        }
+        for (int i = 1; i <= 3; i++) {
+            ArrayList<Integer> diag1 = new ArrayList<Integer>();
+            ArrayList<Integer> diag2 = new ArrayList<Integer>();
+        }
+        return diags;
     }
 
     public String toString() {
@@ -73,7 +96,7 @@ public class Board {
 
             result += " |\n";
         }
-        result += "   1   2   3   4   5   6   7 ";
+        result += "   1   2   3   4   5   6   7 \n";
         return result;
     }
 }
