@@ -10,6 +10,8 @@ public class Main {
         while (!board.partieTermine()) {
             System.out.println(board);
             joueurEnCours = 3 - joueurEnCours;
+            System.out.println("Coup disponible : ");
+            System.out.println(board.getListCoup());
             System.out.println("Rentrez votre coup : ");
             int coup = in.nextInt();
             board.play(coup, joueurEnCours);

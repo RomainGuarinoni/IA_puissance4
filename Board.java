@@ -17,8 +17,10 @@ public class Board {
     }
 
     // Board [ligne][colonne]
-    public Board(int[][] board) {
+    public Board(int[][] board, int joueur1, int joueur2) {
         this.board = this.copyBoard(board);
+        this.joueur1 = joueur1;
+        this.joueur2 = joueur2;
     }
 
     // permet de copier le tableau passer en paramètre sans la référence
@@ -36,6 +38,10 @@ public class Board {
     public void play(int x, int joueurEnCours) {
         int hauteur = 0;
         x--;
+        if (x > 6 || x < 0) {
+            System.out.println("coup impossible");
+            return;
+        }
         for (int i = 0; i < this.board.length; i++) {
             if (this.board[i][x] == this.joueur1 || this.board[i][x] == this.joueur2) {
                 hauteur++;
@@ -44,7 +50,7 @@ public class Board {
         try {
             this.board[this.board.length - (hauteur + 1)][x] = joueurEnCours;
         } catch (Exception e) {
-            System.out.println("La colonne " + x + 1 + " est déjà rempli à fond");
+            System.out.println("La colonne " + (x + 1) + " est déjà rempli à fond");
         }
 
     }
@@ -54,7 +60,7 @@ public class Board {
         ArrayList<Integer> result = new ArrayList<Integer>();
         for (int i = 0; i < this.board[0].length; i++) {
             if (this.board[0][i] != this.joueur1 && this.board[0][i] != this.joueur2) {
-                result.add(i);
+                result.add(i + 1);
             }
         }
         return result;
@@ -155,6 +161,10 @@ public class Board {
 
     public int getGagnant() {
         return this.vainqueur;
+    }
+
+    public int[][] getBoard() {
+        return this.board;
     }
 
     public String toString() {
