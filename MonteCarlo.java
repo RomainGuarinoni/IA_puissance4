@@ -12,7 +12,7 @@ public class MonteCarlo {
         rnd = new Random();
         this.ennemi = ennemi;
         this.bot = bot;
-        this.max_iteration = 5000;
+        this.max_iteration = 20000;
     }
 
     private int getJoueurEnnemi(int joueurEnCours) {
@@ -55,10 +55,13 @@ public class MonteCarlo {
         int joueurEnCours = node.getJoueur();
 
         if (node.getBoard().partieTermine()) {
-            if (node.getBoard().getGagnant() == this.ennemi) {
-                node.setScoreVictoire(Integer.MAX_VALUE);
-                return node.getBoard().getGagnant();
+            if (node.getBoard().partieGagnee()) {
+                if (node.getBoard().getGagnant() == this.ennemi) {
+                    node.setScoreVictoire(Integer.MAX_VALUE);
+                    return node.getBoard().getGagnant();
+                }
             }
+
         }
         while (!node.getBoard().partieTermine()) {
             joueurEnCours = getJoueurEnnemi(joueurEnCours);

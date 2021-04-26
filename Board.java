@@ -5,6 +5,7 @@ public class Board {
     private int joueur2 = 2;
     private int[][] board;
     private int vainqueur;
+    private boolean partieGagne = false;
 
     public Board() {
         this.board = new int[6][7];
@@ -25,7 +26,7 @@ public class Board {
 
     // permet de copier le tableau passer en paramètre sans la référence
     private int[][] copyBoard(int[][] board) {
-        int[][] copyBoard = new int[7][6];
+        int[][] copyBoard = new int[6][7];
         for (int i = 0; i < copyBoard.length; i++) {
             for (int j = 0; j < copyBoard[i].length; j++) {
                 copyBoard[i][j] = board[i][j];
@@ -100,14 +101,27 @@ public class Board {
     }
 
     public boolean partieTermine() {
+        // vérifier si il ya match nul
+        int egal = 0;
+        for (int i = 0; i < this.board[0].length; i++) {
+            if (this.board[0][i] == this.joueur1 || this.board[0][i] == this.joueur2) {
+                egal++;
+            }
+        }
+        if (egal == this.board[0].length) {
+            return true;
+        }
+
         ArrayList<ArrayList<Integer>> diags = this.getAllDiag();
         for (int i = 0; i < diags.size(); i++) {
             if (quatreAligneList(diags.get(i))) {
+                this.partieGagne = true;
                 return true;
             }
         }
         for (int j = 0; j < this.board.length; j++) {
             if (quatreAligneArray(this.board[j])) {
+                this.partieGagne = true;
                 return true;
             }
         }
@@ -117,6 +131,7 @@ public class Board {
                 array[l] = this.board[l][k];
             }
             if (this.quatreAligneArray(array)) {
+                this.partieGagne = true;
                 return true;
             }
         }
@@ -157,6 +172,10 @@ public class Board {
             }
         }
         return false;
+    }
+
+    public boolean partieGagnee() {
+        return this.partieGagne;
     }
 
     public int getGagnant() {
