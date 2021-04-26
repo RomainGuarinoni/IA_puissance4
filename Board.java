@@ -4,6 +4,7 @@ public class Board {
     private int joueur1 = 1;
     private int joueur2 = 2;
     private int[][] board;
+    private int vainqueur;
 
     public Board() {
         this.board = new int[6][7];
@@ -59,7 +60,7 @@ public class Board {
         return result;
     }
 
-    public ArrayList<ArrayList<Integer>> getAllDiag() {
+    private ArrayList<ArrayList<Integer>> getAllDiag() {
         ArrayList<ArrayList<Integer>> diags = new ArrayList<ArrayList<Integer>>();
         for (int i = 3; i <= 5; i++) {
             // System.out.println("new diags " + i);
@@ -76,10 +77,84 @@ public class Board {
             diags.add(diag2);
         }
         for (int i = 1; i <= 3; i++) {
-            ArrayList<Integer> diag1 = new ArrayList<Integer>();
-            ArrayList<Integer> diag2 = new ArrayList<Integer>();
+            ArrayList<Integer> diag3 = new ArrayList<Integer>();
+            ArrayList<Integer> diag4 = new ArrayList<Integer>();
+            int iAux = i;
+            int j = 5;
+            while (iAux <= 6) {
+                diag3.add(this.board[j][iAux]);
+                diag4.add(this.board[j][6 - iAux]);
+                iAux++;
+                j--;
+            }
+            diags.add(diag3);
+            diags.add(diag4);
         }
         return diags;
+    }
+
+    public boolean partieTermine() {
+        ArrayList<ArrayList<Integer>> diags = this.getAllDiag();
+        for (int i = 0; i < diags.size(); i++) {
+            if (quatreAligneList(diags.get(i))) {
+                return true;
+            }
+        }
+        for (int j = 0; j < this.board.length; j++) {
+            if (quatreAligneArray(this.board[j])) {
+                return true;
+            }
+        }
+        for (int k = 0; k < 7; k++) {
+            int[] array = new int[6];
+            for (int l = 0; l < this.board.length; l++) {
+                array[l] = this.board[l][k];
+            }
+            if (this.quatreAligneArray(array)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean quatreAligneArray(int[] array) {
+        int joueurEnCours = array[0];
+        int currentAlignement = 1;
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] == joueurEnCours && array[i] != 0) {
+                currentAlignement++;
+                if (currentAlignement == 4) {
+                    this.vainqueur = joueurEnCours;
+                    return true;
+                }
+            } else {
+                joueurEnCours = array[i];
+                currentAlignement = 1;
+            }
+        }
+        return false;
+    }
+
+    private boolean quatreAligneList(ArrayList<Integer> array) {
+        int joueurEnCours = array.get(0);
+        int currentAlignement = 1;
+        for (int i = 1; i < array.size(); i++) {
+            if (array.get(i) == joueurEnCours && array.get(i) != 0) {
+                currentAlignement++;
+                if (currentAlignement == 4) {
+                    this.vainqueur = joueurEnCours;
+                    return true;
+                }
+            } else {
+                joueurEnCours = array.get(i);
+                currentAlignement = 1;
+            }
+        }
+        return false;
+    }
+
+    public int getGagnant() {
+        return this.vainqueur;
     }
 
     public String toString() {
