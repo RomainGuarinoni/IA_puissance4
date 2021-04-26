@@ -8,24 +8,27 @@ public class Node implements Comparable<Node> {
     private int joueur;
     private ArrayList<Node> childArray;
     private Board board;
+    private int coup;
 
     public Node() {
         this.uctScore = 0;
         this.childArray = new ArrayList<>();
     }
 
-    public Node(int joueur) {
+    public Node(int joueur, Board board) {
         this.joueur = joueur;
+        this.board = board;
         this.uctScore = 0;
         this.childArray = new ArrayList<>();
     }
 
-    public Node(Board board, Node parent, int joueur) {
+    public Node(Board board, Node parent, int joueur, int coup) {
         this.uctScore = 0;
         this.joueur = joueur;
         this.board = board;
         this.parent = parent;
         this.childArray = new ArrayList<>();
+        this.coup = coup;
     }
 
     public Node getParent() {
@@ -60,8 +63,12 @@ public class Node implements Comparable<Node> {
         return this.childArray;
     }
 
-    public void setCoup(Board board) {
-        this.board = board;
+    public void setCoup(int coup) {
+        this.coup = coup;
+    }
+
+    public int getCoup() {
+        return this.coup;
     }
 
     public void setScoreVictoire(int score) {

@@ -42,7 +42,7 @@ public class MonteCarlo {
             for (int i = 0; i < listeCoups.size(); i++) {
                 Board newBoard = new Board(node.getBoard().getBoard(), this.bot, this.ennemi);
                 newBoard.play(listeCoups.get(i), joueurEnCours);
-                Node tmpNode = new Node(newBoard, node, joueurEnCours);
+                Node tmpNode = new Node(newBoard, node, joueurEnCours, listeCoups.get(i));
                 newArrayChild.add(tmpNode);
             }
             node.setChildArray(newArrayChild);
@@ -80,5 +80,32 @@ public class MonteCarlo {
             }
             nodeAux = nodeAux.getParent();
         }
+    }
+
+    private Node findBestChild(Node root) {
+        ArrayList<Node> children = root.getChildArray();
+        int max = 0;
+        Node bestNode = new Node();
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i).getNbVisite() > max) {
+                max = children.get(i).getNbVisite();
+                bestNode = children.get(i);
+            }
+        }
+        return bestNode;
+    }
+
+    public int meilleurCoup(Board board) {
+        Arbre arbre = new Arbre(this.ennemi, board);
+        Node root = arbre.getRoot();
+        Node newNode;
+        int gagnant;
+        for (int iter = 0; iter < this.max_iteration; iter++) {
+            Node nodeSelectione = this.selection(root);
+            newNode = this.expension(nodeSelectione);
+            gagnant = this.simulation(newNode);
+            this.backPropagation(nodeSelectione, gagnant);
+        }
+        return findBestChild(root).getCoup();
     }
 }

@@ -1,8 +1,8 @@
 public class Arbre {
     Node root;
 
-    public Arbre(int joueur) {
-        root = new Node(joueur);
+    public Arbre(int joueur, Board board) {
+        root = new Node(joueur, board);
     }
 
     public Node getRoot() {
