@@ -50,4 +50,35 @@ public class MonteCarlo {
         }
         return node;
     }
+
+    private int simulation(Node node) {
+        int joueurEnCours = node.getJoueur();
+
+        if (node.getBoard().partieTermine()) {
+            if (node.getBoard().getGagnant() == this.ennemi) {
+                node.setScoreVictoire(Integer.MAX_VALUE);
+                return node.getBoard().getGagnant();
+            }
+        }
+        while (!node.getBoard().partieTermine()) {
+            joueurEnCours = getJoueurEnnemi(joueurEnCours);
+            ArrayList<Integer> coupPossible = node.getBoard().getListCoup();
+            int coupJoue = coupPossible.get(rnd.nextInt(coupPossible.size()));
+            node.getBoard().play(coupJoue, joueurEnCours);
+        }
+        return node.getBoard().getGagnant();
+    }
+
+    private void backPropagation(Node node, int joueurGagnant) {
+        Node nodeAux = node;
+        while (nodeAux != null) {
+            nodeAux.incrementNbVisite();
+            if (joueurGagnant == this.bot) {
+                if (nodeAux.getJoueur() == this.bot) {
+                    nodeAux.incrementScore();
+                }
+            }
+            nodeAux = nodeAux.getParent();
+        }
+    }
 }
